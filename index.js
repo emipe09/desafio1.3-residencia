@@ -3,7 +3,9 @@ const readline = promptSync();
 
 import { Conversor } from "./conversor.js"
 
-while (1) {
+// Loop para realizar conversões até que o usuário decida parar
+let continuar = true;
+while (continuar) {
     try {
         let moedaOrigem = readline('Digite a moeda de origem: ').toUpperCase();
         let moedaDestino = readline('Digite a moeda de destino: ').toUpperCase();
@@ -11,14 +13,17 @@ while (1) {
 
         const conversor = new Conversor(moedaOrigem, moedaDestino, valor);
         await conversor.conversor();
-        console.log('Fim');
-        let i = readline('Deseja realizar outra conversão? (s/n): ').toLowerCase();
+        let i = readline('Deseja realizar outra conversão? (s/n)').toLowerCase();
         if (i == 'n') {
-            break;
+            continuar = false;
         }
+        else if (i != 's') {
+            throw new Error('Resposta inválida, continuando operação');
+        }
+
     }
     catch (error) {
-        console.log('Erro: ' + error.message);
+        console.error(error.message);
     }
 }
 

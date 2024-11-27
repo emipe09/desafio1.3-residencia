@@ -35,6 +35,7 @@ export class Conversor {
     * Caso ocorra um erro, ele é tratado e exibido no console
     * 
     * Utiliza-se o método GET do axios para acessar a API
+    * Função assíncrona para aguardar a resposta da API e tratá-la corretamente antes de exibir
     */
     async conversor() {
         try {
@@ -42,7 +43,9 @@ export class Conversor {
             console.log(`${this.moedaOrigem} ${this.obterValor(this.valor)} => ${this.moedaDestino} ${this.obterValor(response.data.conversion_result)}`);
             console.log(`Taxa: ${this.obterTaxa(response.data.conversion_rate)}`);
         } catch (error) {
-            console.error('Error:', error);
+            if(error.response && error.response.status == 404){
+                console.error(`Erro ${error.response.status}: Falha na requisição API, verifique se as moedas de origem e destino existem, além do formato do valor`);
+            }
         }
     }
     
